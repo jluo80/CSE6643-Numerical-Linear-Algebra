@@ -1,0 +1,1 @@
+Directly run HW3.m as the main function.
