@@ -1,0 +1,151 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{color}
+
+\title{CSE6643 Numerical Linear Algebra HW2} 
+\author{Jiahao Luo 903103970} 
+\begin{document}    
+\maketitle  
+\section{Exercise 7.4}Let $x^{(1)}$, $y^{(1)}$, $x^{(2)}$ and $y^{(2)}$ be nonzero vectors in $R^3$ with the property that $x^{(1)}$ and $y^{(1)}$ are linearly independent and so are $x^{(2)}$ and $y^{(2)}$. Consider the two planes in $R^3$,
+$$P^{(1)}=<x^{(1)},y^{(1)}>, P^{(2)}=<x^{(2)},y^{(2)}>$$
+Suppose we wish to find a nonzero vector $v \in R^3$ that lies in the intersection $P=P^{(1)} \cap p^{(2)}$. Devise a method for solving this problem by reducing it to the computation of $QR$ factorizations of three $3 \times 2$ matrices.
+
+\paragraph{Solution:}Since $P^{1}$ and $P^{2}$ are two 3-by-2 matrices spanned by $<x^{(1)}, y^{(1)}>$ and $<y^{(2)}, y^{(2)}>$ respectively. To find the line lies in the intersection of $P^{(1)}$ and $P^{(2)}$. We can find the normal vectors to the plane respectively and the result vector should orthogonal to  both of the normal vectors.(Or the plane they constructed.)\\
+
+(1)Apply a full QR factorization on $P^{(1)}$, and $P^{(2)}$, then we will get two 3-by-3 orthonormal matrices, $Q^{(1)}$, and $Q^{(2)}$. We can regard the first two orthonormal columns of $Q^{(1)}$, and $Q^{(2)}$ as the basic vectors of those two planes, thus the third orthonormal columns are the unit normal vectors to those two planes.\\
+
+(2)In the next step, we need to do it in the similar way to find the normal vector that is orthogonal to both normal vectors. Then we can easily think that we can construct a 3-by-2 matrix $P^{(3)}=[x^{(3)}, y^{(3)}]$ where $x^{(3)}, y^{(3)}$ are the normal vectors that we get from the previous step. Then we apply a full QR factorization to this matrix again, the third column of the $Q^{(3)}$ is the vector that lies in the intersection of two planes.\\
+
+\section{•} Let $V$ be an $m \times n$ matrix, $n \leq m$. Let $M=V^TV$ and $V=span\{v_1,v_2,\cdots,v_n\}$ where $v_i$ are $i$-th column of $V$.\\
+
+\textbf{(1)Prove that $M$ is non-singular if and only if $V$ is full rank.}
+\paragraph{Proof:}1.Since $M$ is non-singular such that $Rank(M) = n$, and $Rank(V)=Rank(V^T) \leq n$. According to the property $Rank(AB) \leq min{rank(A), rank(B)}$, we can obtain:
+$$Rank(M) = n \leq min\{rank(V), rank(V^T)\}=Rank(V)$$\\
+Therefore $Rank(V)=n$, $V$ is full rank if $M$ is non-singular.\\
+
+2.Since $V$ is full rank, then we have $Rank(V)=Rank(V^T)=n$. According to Sylvester’s rank inequality:$Rank(A) + Rank(B) - n \leq Rank(AB)$, we can obtain:
+$$Rank(V) + Rank(V^T) - n=n \leq Rank(M) \leq min\{m,n\}$$
+Therefore $Rank(M)=n$, $M$ is non-singular if $V$ is full rank.\\
+
+(2)\textbf{Prove that $P=VM^{-1}V^T$ is an orthogonal projection onto $V$ if $M$ is non-singular.}\\
+\textbf{Proof:}\\ If $M$ is non-singular:
+1.$P^2 = (V M^{-1} V^T)(V M^{-1} V^T) = V (V^TV)^{-1} V^T V (V^TV)^{-1} V^T = V (V^TV)^{-1} V^T = V M^{-1} V^T = P$, then $P$ is a projector.\\
+
+2.Since $P^* = (V M^{-1} V^T)^* = ((V M^{-1}) V^T)^* = V (V^T M^{-1})^* = V (M^{-1})^* V^T = V ((V^TV)^{-1})^* V^T = V ((V^TV)^*)^{-1} V^T = V (V^TV)^{-1} V^T = V M^{-1} V^T = P$, such that we can obtain that $P$ is an orthogonal projector. Besides, since $P$ is linear combination of $V$, then $Range(P)=Range(V)$. Therefore, $P$ is an orthogonal projection onto $V$ if $M$ is non-singular.\\
+\\
+
+(3)\textbf{Let $E=I-V^TV$. Suppose $||E||<1$. Show that $M$ is non-singular. In this case, show that
+$$I-V(I+E)V^T=(I-VV^T)^2,$$
+and
+$$I-V(I+E+E^2+\cdots+E^k)V^T=(I-VV^T)^{k+1}$$
+for $k\geq 1$}
+
+\textbf{Proof:} If $M$ is non-singular:\\
+
+(1)Since $E = I - V^T V$
+$$I-V(I+E)V^T = I - V(I + I - V^T V)V^T = I - V(2I - V^T V)V^T = I - 2V V^T + V V^T V V^T$$
+$$(I - V V^T)^2 = (I - V V^T)(I - V V^T) = I - 2V V^T + V V^T V V^T$$
+Therefore $I-V(I+E)V^T=(I-VV^T)^2$.\\
+
+(2)Proof by induction. For $k \geq 1$:\\
+
+1.Basic case: For $n=1$, it has been proved in previous.\\
+ 
+2.Inductive hypothesis: Assume it holds for $n=k-1$, that:
+$$I-V(I+E+E^2+\cdots+E^{k-1})V^T=(I-VV^T)^{k}$$
+
+3.Inductive step: show it holds for $n=k$.
+\begin{align*}
+(I-VV^T)^{k+1} & = (I-VV^T)^{k}(I-VV^T)\\
+& = (I-V(I+E+E^2+\cdots+E^{k-1})V^T)(I-VV^T)\\
+& = I-V(I+E+E^2+\cdots+E^{k-1})V^T - VV^T + V(I-V(I+E+E^2+\cdots+E^{k-1})V^T)V^TVV^T\\
+& = I-V(I+E+E^2+\cdots+E^{k-1}+E^k)V^T\\
+& + V(E^k - I + (I-V(I+E+E^2+\cdots+E^{k-1})V^TV)V^T\\ 
+\end{align*}
+Thus, to prove this, we just need to prove:
+$$E^k - I + (I+E+E^2+\cdots+E^{k-1})V^TV = 0$$
+Since $E^k - I = (E - I)(E^{k-1} + \cdots + E^2 + E + I)$, and $E = I - V^TV$ substitute into the above equation, we can obtain:
+\begin{align*}
+& = (E - I)(E^{k-1} + \cdots + E^2 + E + I) + (E^{k-1} + \cdots + E^2 + E + I)V^TV\\
+& = (-V^TV)(E^{k-1} + \cdots + E^2 + E + I) + (E^{k-1} + \cdots + E^2 + E + I)V^TV\\
+& = 0
+\end{align*}
+Therefore the statement is proved.
+
+\section{Exercise 11.3}Take $m=50,n=12$. Using MATLAB's linspace, define $t$ to be the m-vector corresponding to linearly spaced grid points from 0 to 1. Using MATLAB's vander and fliplr, define $A$ to be the $m \times m$ matrix associated with least squares fitting on this grid by a polynomial of degree $n-1$,. Take $b$ to be the function $cos(4t)$ evaluated on the grid. Now, calculate tand print(to sixteen-digit precision) the least squares coefficient vector $x$ by six methods:\\
+
+(a)Formation and solution of the normal equations, using MATLAB's \\
+
+(b)QR factorization computed by mgs (modified Gram-Schmidt, Exercise 8.2),\\
+
+(c)QR factorization computed by house (Householder triangularization, Exercise 10.2),\\
+
+(d)QR factorization computed by MATLAB's qr (also Householder triangularization),\\
+
+(d')QR factorization computed by using repeated classical Gram-Schmidt, with 1 and 2 times of repeat.\\
+
+(e)x = A \ b in MATLAB (also based on QR factorization),\\
+
+(f)SVD, using MATLAB's svd.\\
+
+(g)The calculations above will produce six lists of twelve coefficients. In each list, shade with red pen the digits that appear to be wrong (affected by rounding error). Comment on what differences you observe. Do the normal equations exhibit instability? You do not have to explain your observations.\\
+
+\paragraph{Result:}The following are the results of 7 different methods.(Sixteen-digit precision)
+{\small \begin{verbatim}
+x =
+
+  Columns 1 through 3
+
+    1.00000001106119e+000    1.00000000113937e+000    1.00000000099659e+000
+   -3.38516790859808e-006   -446.260560954172e-009   -422.742101412907e-009
+   -7.99987012779543e+000   -7.99998062814466e+000   -7.99998123570392e+000
+   -1.95350775076358e-003   -324.763425529228e-006   -318.763047118621e-006
+    10.6819277119107e+000    10.6694588673950e+000    10.6694307947927e+000
+   -70.1391166787865e-003   -13.8809248104573e-003   -13.8202838017789e-003
+   -5.48760242779178e+000   -5.64706056054064e+000   -5.64707563776455e+000
+   -367.019650396411e-003   -75.0990471552168e-003   -75.3160071130159e-003
+    2.03789076587387e+000    1.69310136796069e+000    1.69360694478554e+000
+   -247.141737401614e-003    6.56420405795362e-003    6.03212158475190e-003
+   -268.752744679386e-003   -374.522285271160e-003   -374.241708480613e-003
+    69.0205827569785e-003    88.1005955819296e-003    88.0405769317544e-003
+
+  Columns 4 through 6
+
+    1.00000000099661e+000    984.159532364289e-003    1.00000000099661e+000
+   -422.743025143896e-009   -2.33201920431945e+000   -422.743369578396e-009
+   -7.99998123568625e+000    1.36126254720476e+000   -7.99998123567589e+000
+   -318.763222128874e-006    1.64702730097114e+000   -318.763350539680e-006
+    10.6694307958102e+000    1.94824237505376e+000    10.6694307966749e+000
+   -13.8202875322556e-003    2.24323719697926e+000   -13.8202910726380e-003
+   -5.64707562880610e+000    2.52358672783268e+000   -5.64707561949691e+000
+   -75.3160213969104e-003    2.78664230623634e+000   -75.3160374612204e-003
+    1.69360695976283e+000    3.03221850435409e+000    1.69360697786185e+000
+    6.03211166611429e-003    3.26114186998314e+000    6.03209884620831e-003
+   -374.241704721490e-003    3.47460672703093e+000   -374.241699540140e-003
+    88.0405763106434e-003    3.67388825519025e+000    88.0405753994254e-003
+
+  Column 7
+
+    1.00000000099661e+000
+   -422.743029156081e-009
+   -7.99998123568627e+000
+   -318.763223112653e-006
+    10.6694307958265e+000
+   -13.8202876359424e-003
+   -5.64707562844989e+000
+   -75.3160221321331e-003
+    1.69360696070324e+000
+    6.03211093473621e-003
+   -374.241704404184e-003
+    88.0405762516879e-003
+\end{verbatim}}
+\textbf{(1)Comment on what differences you observe}\\
+Answer: According to the outcomes, the results of method $a$ and $d'$ are highly different to the rest of the methods. Although the results of method $b$, $c$, $d$, $e$, $f$ are very similar, there are some differences when the precision comes to sixteen digits.\\
+
+\textbf{(2)Do the normal equations exhibit instability?}\\
+Answer: The normal equations exhibit instability. The result of $a$ is close to $b$ to $f$, but it is very unstable so that there is a relatively large error.
+
+\end{document} 
