@@ -1,0 +1,1 @@
+[p_A_100, sigma_min_100] = Problem_5();
